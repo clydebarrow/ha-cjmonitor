@@ -1,7 +1,13 @@
 {
+  "type": "hub",
   "domain": "cjmonitor",
   "name": "CJMonitor",
   "codeowners": ["@clydebarrow"],
+  "bluetooth": [
+    {
+      "manufacturer_id": 1138
+    }
+  ]e
   "config_flow": true,
   "dependencies": ["bluetooth_adapters"],
   "documentation": "https://github.com/clydebarrow/cjmonitor",

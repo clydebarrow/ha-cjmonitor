@@ -1,4 +1,4 @@
-"""Config flow for inkbird ble integration."""
+"""Config flow for CJMon ble integration."""
 from __future__ import annotations
 
 from typing import Any
@@ -12,11 +12,12 @@ from homeassistant.components.bluetooth import (
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.const import CONF_ADDRESS
 from homeassistant.data_entry_flow import FlowResult
+from .parser import CJMonBLEData as DeviceData
 
 from .const import DOMAIN
 
 
-class INKBIRDConfigFlow(ConfigFlow, domain=DOMAIN):
+class CJMonConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Control-J Monitors."""
 
     VERSION = 1
