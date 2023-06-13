@@ -10,7 +10,7 @@ import struct
 from bluetooth_sensor_state_data import BluetoothData
 from home_assistant_bluetooth import BluetoothServiceInfo
 from sensor_state_data import SensorLibrary
-from const import CJ_MANUF_ID
+from .const import CJ_MANUF_ID
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -30,13 +30,9 @@ class CJMonBLEData(BluetoothData):
         """Update from BLE advertisement data."""
         _LOGGER.debug("Parsing CJMon BLE advertisement data: %s", service_info)
         manufacturer_data = service_info.manufacturer_data
-
-        if not manufacturer_data:
+        if not manufacturer_data or CJ_MANUF_ID not in manufacturer_data:
             return
-
         data = manufacturer_data[CJ_MANUF_ID]
-        if not data:
-            return
         msg_length = len(data)
         if msg_length < 6:
             return
@@ -44,13 +40,13 @@ class CJMonBLEData(BluetoothData):
         if model not in MODELS:
             return
         _LOGGER.debug("Parsing CJMonitor BLE advertisement data: %s", data)
+        self.set_device_type(f"CJMon-{model}")
         self.set_device_manufacturer("Control-J")
         local_name = service_info.name
         self.set_device_name(local_name)
-        self.update_predefined_sensor(SensorLibrary.TEMPERATURE__CELSIUS, temp / 10.0)
+        self.update_predefined_sensor(SensorLibrary.TEMPERATURE__CELSIUS, temp / 100.0)
         self.update_predefined_sensor(SensorLibrary.HUMIDITY__PERCENTAGE, hum)
         self.update_predefined_sensor(SensorLibrary.LIGHT__LIGHT_LUX, mulaw_to_value(light))
-        self.set_device_type(f"CJMon-{model}")
         if msg_length == 10:
             (battery, pressure, bits) = struct.Struct("<BHB").unpack(data[6:10])
             self.update_predefined_sensor(SensorLibrary.PRESSURE__MBAR, pressure)
