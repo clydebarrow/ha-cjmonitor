@@ -131,9 +131,7 @@ async def async_setup_entry(
 
 
 class CJMonBluetoothSensorEntity(
-    PassiveBluetoothProcessorEntity[PassiveBluetoothDataProcessor[float | int | None]],
-    SensorEntity,
-):
+    PassiveBluetoothProcessorEntity, SensorEntity):
     """Representation of a CJMon ble sensor."""
 
     @property
